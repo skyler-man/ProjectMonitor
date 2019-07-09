@@ -56,7 +56,7 @@ public class JiraInfoSchedule {
             return null;
         }
         JiraProject jiraProject = new JiraProject();
-        jiraProject.setProjectName(project.getKey());
+        jiraProject.setProjectName(project.getName());
         List<JiraMember> jiraMembers = new ArrayList<>();
         JiraMember jiraMember = new JiraMember();
         jiraMember.setJiraProject(jiraProject);
