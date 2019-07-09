@@ -7,7 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 /**
- * @Description:
+ * @Description: 项目Bug状态及数量
  * @Author: LiuYiQiang
  * @Date: 14:49 2019/7/9
  */

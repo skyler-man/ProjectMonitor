@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description:
+ * @Description: Jira项目实体
  * @Author: LiuYiQiang
  * @Date: 14:36 2019/7/9
  */
