@@ -11,6 +11,7 @@ import javax.persistence.*;
  * @Author: LiuYiQiang
  * @Date: 14:42 2019/7/9
  */
+@Entity
 @Data
 @NoArgsConstructor
 @Table(name = "monitor_jira_member")

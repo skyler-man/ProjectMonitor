@@ -13,6 +13,7 @@ import java.util.List;
  * @Author: LiuYiQiang
  * @Date: 14:36 2019/7/9
  */
+@Entity
 @Data
 @NoArgsConstructor
 @Table(name = "monitor_jira_project")

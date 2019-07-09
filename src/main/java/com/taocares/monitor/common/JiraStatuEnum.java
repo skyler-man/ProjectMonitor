@@ -8,14 +8,14 @@ package com.taocares.monitor.common;
 public enum  JiraStatuEnum {
 
     Open("Open","开放"),
-    InProgress("In Progress","处理中"),
+    InProgress("\"In Progress\"","处理中"),
     Reopened("Reopened","重新打开"),
     Resolved("Resolved","已解决"),
     Closed("Closed","已关闭"),
     NotProgressNow("暂不处理","暂不处理"),
     UnableReproduce("无法重现","无法重现"),
     Done("Done","完成"),
-    ToDo("To Do","待办"),
+    ToDo("\"To Do\"","待办"),
     Testing("提交测试","提交测试");
 
 
@@ -29,5 +29,9 @@ public enum  JiraStatuEnum {
 
     public String getCode() {
         return code;
+    }
+
+    public String getDesc() {
+        return Desc;
     }
 }
