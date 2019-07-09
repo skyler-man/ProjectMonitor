@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -37,6 +38,7 @@ public class JiraInfoSchedule {
 
     @Scheduled(cron = "0/10 * * * * *")
     public void getJiraInfo() throws URISyntaxException, ExecutionException, InterruptedException {
+        Long startTime = System.currentTimeMillis();
         ArrayList<String> allProjects = JiraUtil.getAllProjects();
         List<JiraProject> jiraProjects = new ArrayList<>();
         for(String projectKey : allProjects){
@@ -49,9 +51,11 @@ public class JiraInfoSchedule {
         if(ListUtils.isNotEmpty(jiraProjects)){
 //            jiraProjectRepository.saveAll(jiraProjects);
         }
+        Long endTime = System.currentTimeMillis();
+        log.info("Jira数据统计完成，总耗时：{}",endTime - startTime);
     }
 
-    private JiraProject dealWithJiraInfo(Project project,String projectKey){
+    private JiraProject dealWithJiraInfo(Project project,String projectKey) throws ExecutionException, InterruptedException {
         if(project == null){
             return null;
         }
@@ -64,17 +68,32 @@ public class JiraInfoSchedule {
         jiraMember.setName(project.getLead() != null ? project.getLead().getDisplayName() : null);
         jiraMembers.add(jiraMember);
         List<JiraBug> jiraBugs = new ArrayList<>();
-        for(JiraStatuEnum jiraStatuEnum : JiraStatuEnum.values()){
-            String jql = "project = " + projectKey + " AND status = " + jiraStatuEnum.getCode() + " AND created >= 2018-07-01 AND created <= 2019-12-31 ORDER BY priority DESC, updated DESC";
-            int num = JiraUtil.search_jql1(jql);
+
+
+        String jql = "project = " + projectKey + " AND created >= 2018-07-01";
+        Map<String,Integer> jiraBugInfo = JiraUtil.search_jql(jql,projectKey);
+
+        for(Map.Entry<String,Integer> entry : jiraBugInfo.entrySet()){
             JiraBug jiraBug = new JiraBug();
-            jiraBug.setNumber(num);
-            jiraBug.setStatusName(jiraStatuEnum.getCode());
+            jiraBug.setNumber(entry.getValue());
+            jiraBug.setStatusName(entry.getKey());
             jiraBug.setJiraProject(jiraProject);
             jiraBugs.add(jiraBug);
         }
         jiraProject.getJiraBugs().addAll(jiraBugs);
         jiraProject.getJiraMembers().addAll(jiraMembers);
+
+//        for(JiraStatuEnum jiraStatuEnum : JiraStatuEnum.values()){
+//            String jql = "project = " + projectKey + " AND status = " + jiraStatuEnum.getCode() + " AND created >= 2018-07-01 AND created <= 2019-12-31 ORDER BY priority DESC, updated DESC";
+//            int num = JiraUtil.search_jql1(jql);
+//            JiraBug jiraBug = new JiraBug();
+//            jiraBug.setNumber(num);
+//            jiraBug.setStatusName(jiraStatuEnum.getCode());
+//            jiraBug.setJiraProject(jiraProject);
+//            jiraBugs.add(jiraBug);
+//        }
+//        jiraProject.getJiraBugs().addAll(jiraBugs);
+//        jiraProject.getJiraMembers().addAll(jiraMembers);
         return jiraProject;
     }
 

@@ -12,9 +12,8 @@ import org.joda.time.DateTime;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -387,7 +386,6 @@ public class JiraUtil {
         //获取项目所有key
         while (iterator.hasNext()){
             String key = iterator.next().getKey();
-            log.info("key：{}"+key);
             issueKeys.add(key);
         }
         return issueKeys;
@@ -399,11 +397,28 @@ public class JiraUtil {
      * @return
      * @throws URISyntaxException
      */
-    public Integer search_jql(String jql){
+    public static Map<String,Integer> search_jql(String jql,String projectKey) throws ExecutionException, InterruptedException {
+        Map<String,Integer> jiraBugInfo = new HashMap<>();
         final NullProgressMonitor pm = new NullProgressMonitor();
+        Long startTime = System.currentTimeMillis();
         SearchResult searchResult = restClient.getSearchClient().searchJql(jql, pm);
-        log.info("Get the total value :"+searchResult.getTotal());
-        return searchResult.getTotal();
+        Long endTime = System.currentTimeMillis();
+        log.info("查询" + projectKey + "总耗时：{}", endTime - startTime);
+        Iterator<BasicIssue> basicIssues = searchResult.getIssues().iterator();
+        while (basicIssues.hasNext()) {
+            BasicIssue basicIssue = basicIssues.next();
+            String key = basicIssue.getKey();
+            Issue issue = getIssue(key);
+            if(issue.getStatus().getName() == null){
+                continue;
+            }
+            if(jiraBugInfo.get(issue.getStatus().getName()) == null){
+                jiraBugInfo.put(issue.getStatus().getName(),1);
+            }else {
+                jiraBugInfo.put(issue.getStatus().getName(),jiraBugInfo.get(issue.getStatus().getName())+1);
+            }
+        }
+        return jiraBugInfo;
     }
 
     public static int search_jql1(String jql) {
