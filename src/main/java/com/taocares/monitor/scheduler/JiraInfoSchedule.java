@@ -1,10 +1,6 @@
 package com.taocares.monitor.scheduler;
 
-import com.atlassian.jira.rest.client.NullProgressMonitor;
-import com.atlassian.jira.rest.client.domain.BasicProject;
-import com.atlassian.jira.rest.client.domain.Issue;
 import com.atlassian.jira.rest.client.domain.Project;
-import com.taocares.monitor.common.JiraStatuEnum;
 import com.taocares.monitor.common.JiraUtil;
 import com.taocares.monitor.common.ListUtils;
 import com.taocares.monitor.entity.JiraBug;
@@ -12,14 +8,12 @@ import com.taocares.monitor.entity.JiraMember;
 import com.taocares.monitor.entity.JiraProject;
 import com.taocares.monitor.repository.JiraProjectRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.core.Is;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -49,7 +43,7 @@ public class JiraInfoSchedule {
             }
         }
         if(ListUtils.isNotEmpty(jiraProjects)){
-//            jiraProjectRepository.saveAll(jiraProjects);
+            jiraProjectRepository.saveAll(jiraProjects);
         }
         Long endTime = System.currentTimeMillis();
         log.info("Jira数据统计完成，总耗时：{}",endTime - startTime);
