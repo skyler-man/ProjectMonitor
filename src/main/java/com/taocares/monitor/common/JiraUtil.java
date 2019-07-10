@@ -13,7 +13,6 @@ import org.joda.time.DateTime;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -356,7 +355,11 @@ public class JiraUtil {
         return (Issue) results.getIssues().iterator().next();
     }
 
-    //获取问题的所有字段
+    /**
+     * @Description: 获取问题的所有字段
+     * @Author: LiuYiQiang
+     * @Date: 8:35 2019/7/10
+     */
     public static void getIssueFields(String issueKEY) throws InterruptedException, ExecutionException {
         try {
             NullProgressMonitor pm = new NullProgressMonitor();
@@ -373,10 +376,11 @@ public class JiraUtil {
     }
 
 
-
-
-
-    // 得到所有项目信息
+    /**
+     * @Description: 得到所有项目信息
+     * @Author: LiuYiQiang
+     * @Date: 8:35 2019/7/10
+     */
     public static ArrayList<String> getAllProjects(){
         final NullProgressMonitor pm = new NullProgressMonitor();
         Iterable<BasicProject> allProjects = restClient
@@ -392,10 +396,9 @@ public class JiraUtil {
     }
 
     /**
-     * 通过jql语句进行查询并返回一个包含issue的key的数组
-     * @param jql
-     * @return
-     * @throws URISyntaxException
+     * @Description: 通过jql语句进行查询并返回一个包含issue的key的数组
+     * @Author: LiuYiQiang
+     * @Date: 8:35 2019/7/10
      */
     public static Map<String,Integer> search_jql(String jql,String projectKey) throws ExecutionException, InterruptedException {
         Map<String,Integer> jiraBugInfo = new HashMap<>();
@@ -421,19 +424,4 @@ public class JiraUtil {
         return jiraBugInfo;
     }
 
-    public static int search_jql1(String jql) {
-        final NullProgressMonitor pm = new NullProgressMonitor();
-        ArrayList<String> issueKeys = new ArrayList<>();
-        try{
-            SearchResult searchResult = restClient.getSearchClient().searchJql(jql, pm);
-            Iterator<BasicIssue> basicIssues = searchResult.getIssues().iterator();
-            while (basicIssues.hasNext()) {
-                String issueKey = basicIssues.next().getKey();
-                issueKeys.add(issueKey);
-            }
-        }catch (Exception e){
-            log.error("查询出错，jql为{}" ,jql,e);
-        }
-        return issueKeys.size();
-    }
 }

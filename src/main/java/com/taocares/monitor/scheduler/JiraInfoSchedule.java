@@ -30,7 +30,12 @@ public class JiraInfoSchedule {
     @Autowired
     private JiraProjectRepository jiraProjectRepository;
 
-    @Scheduled(cron = "0/10 * * * * *")
+    /**
+     * @Description: 第一次延迟一秒后执行，每5分钟执行一次,
+     * @Author: LiuYiQiang
+     * @Date: 8:37 2019/7/10
+     */
+    @Scheduled(initialDelay=1000, fixedRate=5 * 60 * 1000)
     public void getJiraInfo() throws URISyntaxException, ExecutionException, InterruptedException {
         Long startTime = System.currentTimeMillis();
         ArrayList<String> allProjects = JiraUtil.getAllProjects();
@@ -63,7 +68,6 @@ public class JiraInfoSchedule {
         jiraMembers.add(jiraMember);
         List<JiraBug> jiraBugs = new ArrayList<>();
 
-
         String jql = "project = " + projectKey + " AND created >= 2018-07-01";
         Map<String,Integer> jiraBugInfo = JiraUtil.search_jql(jql,projectKey);
 
@@ -77,17 +81,6 @@ public class JiraInfoSchedule {
         jiraProject.getJiraBugs().addAll(jiraBugs);
         jiraProject.getJiraMembers().addAll(jiraMembers);
 
-//        for(JiraStatuEnum jiraStatuEnum : JiraStatuEnum.values()){
-//            String jql = "project = " + projectKey + " AND status = " + jiraStatuEnum.getCode() + " AND created >= 2018-07-01 AND created <= 2019-12-31 ORDER BY priority DESC, updated DESC";
-//            int num = JiraUtil.search_jql1(jql);
-//            JiraBug jiraBug = new JiraBug();
-//            jiraBug.setNumber(num);
-//            jiraBug.setStatusName(jiraStatuEnum.getCode());
-//            jiraBug.setJiraProject(jiraProject);
-//            jiraBugs.add(jiraBug);
-//        }
-//        jiraProject.getJiraBugs().addAll(jiraBugs);
-//        jiraProject.getJiraMembers().addAll(jiraMembers);
         return jiraProject;
     }
 

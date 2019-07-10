@@ -20,9 +20,9 @@ import java.util.List;
 public class JiraProject {
 
     @Id
-    @GenericGenerator(name = "id",strategy = "assigned")
-    @GeneratedValue(generator = "id")
-    @Column(name = "ID", unique = true, nullable = false, precision = 20)
+    @GenericGenerator(name = "systemUUID", strategy = "uuid")
+    @GeneratedValue(generator = "systemUUID")
+    @Column(name = "ID", unique = true, nullable = false)
     private String id;
 
     @Column(name = "project_name", length = 50)
