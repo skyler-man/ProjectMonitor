@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class JiraInfoModel {
+public class JiraInfoDto {
 
     List<String> jiraCommentsBody;
     DateTime jiraCreateTime;

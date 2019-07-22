@@ -5,7 +5,7 @@ import com.atlassian.jira.rest.client.NullProgressMonitor;
 import com.atlassian.jira.rest.client.SearchRestClient;
 import com.atlassian.jira.rest.client.domain.*;
 import com.atlassian.jira.rest.client.internal.jersey.JerseyJiraRestClientFactory;
-import com.taocares.monitor.dto.JiraInfoModel;
+import com.taocares.monitor.dto.JiraInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import mjson.Json;
 import org.joda.time.DateTime;
@@ -269,7 +269,7 @@ public class JiraUtil {
      * @Author: LiuYiQiang
      * @Date: 10:05 2019/7/9
      */
-    public static JiraInfoModel get_jira_info(Issue issue) throws URISyntaxException {
+    public static JiraInfoDto get_jira_info(Issue issue) throws URISyntaxException {
         List<String> jiraCommentsBody = get_comments_body(issue);
         DateTime jiraCreateTime = get_create_time(issue);
         String description = get_description(issue);
@@ -282,7 +282,7 @@ public class JiraUtil {
         ArrayList<String> qianduans = get_qianduans(issue);
         ArrayList<String> developers = get_developers(issue);
         String product = get_product(issue);
-        JiraInfoModel jiraInfoModel = new JiraInfoModel();
+        JiraInfoDto jiraInfoModel = new JiraInfoDto();
         jiraInfoModel.setJiraCommentsBody(jiraCommentsBody);
         jiraInfoModel.setJiraCreateTime(jiraCreateTime);
         jiraInfoModel.setDescription(description);
@@ -299,16 +299,16 @@ public class JiraUtil {
     }
 
 
-    /**
-     * @Description: 得到单一项目信息
-     * @Author: LiuYiQiang
-     * @Date: 11:13 2019/7/9
-     */
-    public static String getProjectByHttp(Project project,String key) throws InterruptedException, ExecutionException {
-        String url = project.getSelf().toString();
-        url = url.substring(0,url.lastIndexOf("/")+1);
-        return HttpUtil.getHttp(url + key);
-    }
+//    /**
+//     * @Description: 得到单一项目信息
+//     * @Author: LiuYiQiang
+//     * @Date: 11:13 2019/7/9
+//     */
+//    public static String getProjectByHttp(Project project,String key) throws InterruptedException, ExecutionException {
+//        String url = project.getSelf().toString();
+//        url = url.substring(0,url.lastIndexOf("/")+1);
+//        return HttpUtil.getHttp(url + key);
+//    }
 
 
     /**
