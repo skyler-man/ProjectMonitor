@@ -37,7 +37,7 @@ public class JiraInfoSchedule {
      * @Author: LiuYiQiang
      * @Date: 8:37 2019/7/10
      */
-//    @Scheduled(initialDelay=1000, fixedRate=5 * 60 * 1000)
+    @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
     public void getJiraInfo() throws URISyntaxException, ExecutionException, InterruptedException {
         Long startTime = System.currentTimeMillis();
         ArrayList<String> allProjects = JiraUtil.getAllProjects();
