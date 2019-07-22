@@ -77,11 +77,23 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- JPA公共包 -->
+		<dependency>
+			<groupId>com.taocares.commons</groupId>
+			<artifactId>commons-jpa</artifactId>
+			<version>1.3.2</version>
+		</dependency>
 		<!--热部署-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>springloaded</artifactId>
 			<version>${springloaded_version}</version>
+		</dependency>
+		<!-- COMMONS-BEAN依赖 -->
+		<dependency>
+			<groupId>com.taocares.commons</groupId>
+			<artifactId>commons-beans</artifactId>
+			<version>1.6.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
@@ -96,6 +108,30 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
 			<version>4.4.8</version>
+		</dependency>
+		<!-- 自动生成代码依赖 start -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.0.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.28</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- 自动生成代码依赖 end -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
 		</dependency>
 	</dependencies>
 
