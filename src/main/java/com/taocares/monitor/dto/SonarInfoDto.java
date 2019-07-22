@@ -5,7 +5,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * @Description:
+ * @Description: Sonar指标
  * @Author: LiuYiQiang
  * @Date: 17:34 2019/7/18
  */

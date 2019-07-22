@@ -5,17 +5,19 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @Description: 项目Bug状态及数量
+ * @Description: Jira项目实体
  * @Author: LiuYiQiang
- * @Date: 14:49 2019/7/9
+ * @Date: 14:36 2019/7/9
  */
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "monitor_jira_bug")
-public class JiraBug {
+@Table(name = "monitor_sonar_project")
+public class SonarProject {
 
     @Id
     @GenericGenerator(name = "systemUUID", strategy = "uuid")
@@ -23,14 +25,13 @@ public class JiraBug {
     @Column(name = "ID", unique = true, nullable = false)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PROJECTID", nullable = false)
-    private JiraProject jiraProject;
+    @Column(name = "project_id", length = 50)
+    private String projectId;
 
-    @Column(name = "status_name", length = 50)
-    private String statusName;
+    @Column(name = "project_key", length = 50)
+    private String projectKey;
 
-    @Column(name="number",precision = 4, scale = 0)
-    private Integer number;
+    @Column(name = "project_name", length = 50)
+    private String projectName;
 
 }
