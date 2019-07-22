@@ -3,12 +3,15 @@ package com.taocares.monitor.scheduler;
 import com.alibaba.fastjson.JSON;
 import com.taocares.monitor.common.HttpUtil;
 import com.taocares.monitor.common.ListUtils;
+import com.taocares.monitor.common.SonarMeasureEnum;
 import com.taocares.monitor.common.StringUtil;
 import com.taocares.monitor.dto.SonarInfoDto;
 import com.taocares.monitor.dto.SonarProjectDto;
 import com.taocares.monitor.entity.SonarMeasureInfo;
 import com.taocares.monitor.entity.SonarProject;
+import com.taocares.monitor.repository.SonarProjectRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,9 @@ import java.util.concurrent.ExecutionException;
 @Transactional(rollbackFor = Exception.class)
 public class SonarInfoSchedule {
 
+    @Autowired
+    private SonarProjectRepository sonarProjectRepository;
+
     /**
      * @Description: 第一次延迟一秒后执行，每60分钟执行一次,
      * @Author: LiuYiQiang
@@ -45,9 +51,12 @@ public class SonarInfoSchedule {
         SonarProjectDto sonarProjectDto = JSON.parseObject(allProject,SonarProjectDto.class);
         List<SonarProject> sonarProjects = generateSonarProjectList(sonarProjectDto);
         setSonarMeasureInfo(sonarProjects);
+        if(ListUtils.isNotEmpty(sonarProjects)){
+            sonarProjectRepository.deleteAll();
+            sonarProjectRepository.saveAll(sonarProjects);
+        }
         Long endTime = System.currentTimeMillis();
         log.info("Sonar数据统计完成，总耗时：{}",endTime - startTime);
-        System.out.println(sonarProjects);
     }
 
     private void setSonarMeasureInfo(List<SonarProject> sonarProjects){
@@ -71,7 +80,10 @@ public class SonarInfoSchedule {
         for(SonarInfoDto.ComponentBean.MeasuresBean measuresBean : sonarInfoDto.getComponent().getMeasures()){
             SonarMeasureInfo measureInfo = new SonarMeasureInfo();
             measureInfo.setSonarProject(sonarProject);
-            measureInfo.setName(measuresBean.getMetric());
+            measureInfo.setNameEn(measuresBean.getMetric());
+            if(measuresBean.getMetric() != null && SonarMeasureEnum.valueOfCode(measuresBean.getMetric()) != null){
+                measureInfo.setNameCn(SonarMeasureEnum.valueOfCode(measuresBean.getMetric()).getDesc());
+            }
             measureInfo.setMeasure(measuresBean.getValue());
             sonarMeasureInfos.add(measureInfo);
         }

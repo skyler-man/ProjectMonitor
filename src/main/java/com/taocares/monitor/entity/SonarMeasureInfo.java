@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "monitor_sonar_project")
+@Table(name = "monitor_sonar_measure_info")
 public class SonarMeasureInfo {
 
     @Id
@@ -27,8 +27,11 @@ public class SonarMeasureInfo {
     @JoinColumn(name = "PROJECTID", nullable = false)
     private SonarProject sonarProject;
 
-    @Column(name = "name", length = 50)
-    private String name;
+    @Column(name = "name_en", length = 50)
+    private String nameEn;
+
+    @Column(name = "name_cn", length = 50)
+    private String nameCn;
 
     @Column(name = "measure", length = 50)
     private String measure;
