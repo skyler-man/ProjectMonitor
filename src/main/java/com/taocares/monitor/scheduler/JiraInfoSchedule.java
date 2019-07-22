@@ -39,6 +39,7 @@ public class JiraInfoSchedule {
      */
     @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
     public void getJiraInfo() throws URISyntaxException, ExecutionException, InterruptedException {
+        log.info("Jira数据统计任务开始...");
         Long startTime = System.currentTimeMillis();
         ArrayList<String> allProjects = JiraUtil.getAllProjects();
         List<JiraProject> jiraProjects = new ArrayList<>();

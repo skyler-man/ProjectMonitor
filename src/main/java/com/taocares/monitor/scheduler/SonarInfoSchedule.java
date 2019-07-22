@@ -40,7 +40,8 @@ public class SonarInfoSchedule {
      * @Date: 8:37 2019/7/10
      */
     @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
-    public void getJiraInfo() throws URISyntaxException, ExecutionException, InterruptedException {
+    public void getSonarInfo() throws URISyntaxException, ExecutionException, InterruptedException {
+        log.info("Sonar数据统计任务开始...");
         Long startTime = System.currentTimeMillis();
         //获取所有项目名称（p:pageindex ps:pagesize）
         String getAllProjectUrl = "http://192.168.163.234:9000/api/components/search?qualifiers=TRK&p=1&ps=200";
