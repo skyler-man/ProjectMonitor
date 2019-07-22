@@ -116,6 +116,8 @@ public class HttpUtil {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("User-Agent", "Mozilla/5.0");
             conn.setRequestProperty("Authorization", "Basic " + authStringEnc);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
 
             if(!StringUtil.empty(token)) {
                 conn.addRequestProperty("api_token", token);

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: Jira项目实体
+ * @Description: Sonar项目实体
  * @Author: LiuYiQiang
  * @Date: 14:36 2019/7/9
  */
@@ -33,5 +33,8 @@ public class SonarProject {
 
     @Column(name = "project_name", length = 50)
     private String projectName;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sonarProject",cascade = {CascadeType.MERGE,CascadeType.REMOVE})
+    private List<SonarMeasureInfo> sonarMeasureInfos = new ArrayList<>();
 
 }

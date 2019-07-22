@@ -6,6 +6,7 @@ import com.taocares.monitor.common.ListUtils;
 import com.taocares.monitor.common.StringUtil;
 import com.taocares.monitor.dto.SonarInfoDto;
 import com.taocares.monitor.dto.SonarProjectDto;
+import com.taocares.monitor.entity.SonarMeasureInfo;
 import com.taocares.monitor.entity.SonarProject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,12 +29,13 @@ import java.util.concurrent.ExecutionException;
 public class SonarInfoSchedule {
 
     /**
-     * @Description: 第一次延迟一秒后执行，每5分钟执行一次,
+     * @Description: 第一次延迟一秒后执行，每60分钟执行一次,
      * @Author: LiuYiQiang
      * @Date: 8:37 2019/7/10
      */
     @Scheduled(initialDelay=1000, fixedRate=10000)
     public void getJiraInfo() throws URISyntaxException, ExecutionException, InterruptedException {
+        Long startTime = System.currentTimeMillis();
         //获取所有项目名称（p:pageindex ps:pagesize）
         String getAllProjectUrl = "http://192.168.163.234:9000/api/components/search?qualifiers=TRK&p=1&ps=200";
         String allProject = HttpUtil.doGet(getAllProjectUrl,"3bbf21a122746a4c2c34579ef5c95f7be17db54b");
@@ -42,18 +44,38 @@ public class SonarInfoSchedule {
         }
         SonarProjectDto sonarProjectDto = JSON.parseObject(allProject,SonarProjectDto.class);
         List<SonarProject> sonarProjects = generateSonarProjectList(sonarProjectDto);
-
-        String sonarInfo = HttpUtil.doGet(getSonarInfoUrl(sonarProjects),"3bbf21a122746a4c2c34579ef5c95f7be17db54b");
-        SonarInfoDto jsonObject = JSON.parseObject(sonarInfo,SonarInfoDto.class);
-
-        System.out.println(jsonObject);
+        setSonarMeasureInfo(sonarProjects);
+        Long endTime = System.currentTimeMillis();
+        log.info("Sonar数据统计完成，总耗时：{}",endTime - startTime);
+        System.out.println(sonarProjects);
     }
 
-    private String getSonarInfoUrl(List<SonarProject> sonarProjects){
+    private void setSonarMeasureInfo(List<SonarProject> sonarProjects){
+        if(ListUtils.isEmpty(sonarProjects)){
+            return;
+        }
         String metricKeys = "metricKeys=bugs,complexity,coverage,duplicated_lines,duplicated_lines_density,violations,code_smells,vulnerabilities";
-        String componentkey = "";
-        String getSonarInfoUrl = "http://192.168.163.234:9000/api/measures/component?component=" + componentkey + "&" + metricKeys;
-        return getSonarInfoUrl;
+        for(SonarProject sonarProject : sonarProjects){
+            String getSonarInfoUrl = "http://192.168.163.234:9000/api/measures/component?component=" + sonarProject.getProjectKey() + "&" + metricKeys;
+            String sonarInfo = HttpUtil.doGet(getSonarInfoUrl,"3bbf21a122746a4c2c34579ef5c95f7be17db54b");
+            SonarInfoDto sonarInfoDto = JSON.parseObject(sonarInfo,SonarInfoDto.class);
+            dealWithSonarMeasure(sonarProject,sonarInfoDto);
+        }
+    }
+
+    private void dealWithSonarMeasure(SonarProject sonarProject,SonarInfoDto sonarInfoDto){
+        if(sonarInfoDto.getComponent() == null || ListUtils.isEmpty(sonarInfoDto.getComponent().getMeasures())){
+            return;
+        }
+        List<SonarMeasureInfo> sonarMeasureInfos = new ArrayList<>();
+        for(SonarInfoDto.ComponentBean.MeasuresBean measuresBean : sonarInfoDto.getComponent().getMeasures()){
+            SonarMeasureInfo measureInfo = new SonarMeasureInfo();
+            measureInfo.setSonarProject(sonarProject);
+            measureInfo.setName(measuresBean.getMetric());
+            measureInfo.setMeasure(measuresBean.getValue());
+            sonarMeasureInfos.add(measureInfo);
+        }
+        sonarProject.getSonarMeasureInfos().addAll(sonarMeasureInfos);
     }
 
     private List<SonarProject> generateSonarProjectList(SonarProjectDto sonarProjectDto){
