@@ -33,7 +33,7 @@ public class JiraInfoSchedule {
     private JiraProjectRepository jiraProjectRepository;
 
     /**
-     * @Description: 第一次延迟一秒后执行，每5分钟执行一次,
+     * @Description: 第一次延迟一秒后执行，每60分钟执行一次,
      * @Author: LiuYiQiang
      * @Date: 8:37 2019/7/10
      */
