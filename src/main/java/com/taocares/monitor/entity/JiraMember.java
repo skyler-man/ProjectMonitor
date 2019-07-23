@@ -18,9 +18,9 @@ import javax.persistence.*;
 public class JiraMember {
 
     @Id
-    @GenericGenerator(name = "id",strategy = "assigned")
-    @GeneratedValue(generator = "id")
-    @Column(name = "ID", unique = true, nullable = false, precision = 20)
+    @GenericGenerator(name = "systemUUID", strategy = "uuid")
+    @GeneratedValue(generator = "systemUUID")
+    @Column(name = "ID", unique = true, nullable = false)
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)

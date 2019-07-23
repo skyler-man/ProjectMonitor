@@ -34,7 +34,7 @@ public class SonarProject {
     @Column(name = "project_name", length = 50)
     private String projectName;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sonarProject",cascade = {CascadeType.MERGE,CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sonarProject",cascade = CascadeType.ALL)
     private List<SonarMeasureInfo> sonarMeasureInfos = new ArrayList<>();
 
 }

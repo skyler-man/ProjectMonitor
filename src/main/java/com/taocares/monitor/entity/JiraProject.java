@@ -28,10 +28,10 @@ public class JiraProject {
     @Column(name = "project_name", length = 50)
     private String projectName;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "jiraProject",cascade = {CascadeType.MERGE,CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "jiraProject",cascade = CascadeType.ALL)
     private List<JiraMember> jiraMembers = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "jiraProject",cascade = {CascadeType.MERGE,CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "jiraProject",cascade = CascadeType.ALL)
     private List<JiraBug> jiraBugs = new ArrayList<>();
 
 }
