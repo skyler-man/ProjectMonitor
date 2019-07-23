@@ -5,14 +5,13 @@ import com.taocares.monitor.common.HttpUtil;
 import com.taocares.monitor.common.ListUtils;
 import com.taocares.monitor.common.SonarMeasureEnum;
 import com.taocares.monitor.common.StringUtil;
-import com.taocares.monitor.dto.SonarInfoDto;
-import com.taocares.monitor.dto.SonarProjectDto;
+import com.taocares.monitor.dto.SonarInfoJsonDto;
+import com.taocares.monitor.dto.SonarProjectJsonDto;
 import com.taocares.monitor.entity.SonarMeasureInfo;
 import com.taocares.monitor.entity.SonarProject;
 import com.taocares.monitor.repository.SonarProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +48,7 @@ public class SonarInfoSchedule {
         if(StringUtil.empty(allProject)){
             return;
         }
-        SonarProjectDto sonarProjectDto = JSON.parseObject(allProject,SonarProjectDto.class);
+        SonarProjectJsonDto sonarProjectDto = JSON.parseObject(allProject,SonarProjectJsonDto.class);
         List<SonarProject> sonarProjects = generateSonarProjectList(sonarProjectDto);
         setSonarMeasureInfo(sonarProjects);
         if(ListUtils.isNotEmpty(sonarProjects)){
@@ -68,17 +67,17 @@ public class SonarInfoSchedule {
         for(SonarProject sonarProject : sonarProjects){
             String getSonarInfoUrl = "http://192.168.163.234:9000/api/measures/component?component=" + sonarProject.getProjectKey() + "&" + metricKeys;
             String sonarInfo = HttpUtil.doGet(getSonarInfoUrl,"3bbf21a122746a4c2c34579ef5c95f7be17db54b");
-            SonarInfoDto sonarInfoDto = JSON.parseObject(sonarInfo,SonarInfoDto.class);
+            SonarInfoJsonDto sonarInfoDto = JSON.parseObject(sonarInfo,SonarInfoJsonDto.class);
             dealWithSonarMeasure(sonarProject,sonarInfoDto);
         }
     }
 
-    private void dealWithSonarMeasure(SonarProject sonarProject,SonarInfoDto sonarInfoDto){
+    private void dealWithSonarMeasure(SonarProject sonarProject,SonarInfoJsonDto sonarInfoDto){
         if(sonarInfoDto.getComponent() == null || ListUtils.isEmpty(sonarInfoDto.getComponent().getMeasures())){
             return;
         }
         List<SonarMeasureInfo> sonarMeasureInfos = new ArrayList<>();
-        for(SonarInfoDto.ComponentBean.MeasuresBean measuresBean : sonarInfoDto.getComponent().getMeasures()){
+        for(SonarInfoJsonDto.ComponentBean.MeasuresBean measuresBean : sonarInfoDto.getComponent().getMeasures()){
             SonarMeasureInfo measureInfo = new SonarMeasureInfo();
             measureInfo.setSonarProject(sonarProject);
             measureInfo.setNameEn(measuresBean.getMetric());
@@ -91,13 +90,13 @@ public class SonarInfoSchedule {
         sonarProject.getSonarMeasureInfos().addAll(sonarMeasureInfos);
     }
 
-    private List<SonarProject> generateSonarProjectList(SonarProjectDto sonarProjectDto){
-        List<SonarProjectDto.ComponentsBean> sonarProjects = sonarProjectDto.getComponents();
+    private List<SonarProject> generateSonarProjectList(SonarProjectJsonDto sonarProjectDto){
+        List<SonarProjectJsonDto.ComponentsBean> sonarProjects = sonarProjectDto.getComponents();
         if(ListUtils.isEmpty(sonarProjects) || sonarProjectDto.getPaging().getTotal() == 0){
             return new ArrayList<>();
         }
         List<SonarProject> projects = new ArrayList<>();
-        for(SonarProjectDto.ComponentsBean project : sonarProjects){
+        for(SonarProjectJsonDto.ComponentsBean project : sonarProjects){
             SonarProject sonarProject = new SonarProject();
             sonarProject.setProjectId(project.getId());
             sonarProject.setProjectKey(project.getKey());

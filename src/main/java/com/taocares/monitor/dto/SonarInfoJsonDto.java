@@ -10,7 +10,7 @@ import java.util.List;
  * @Date: 17:34 2019/7/18
  */
 @ToString
-public class SonarInfoDto {
+public class SonarInfoJsonDto {
 
 
     /**
