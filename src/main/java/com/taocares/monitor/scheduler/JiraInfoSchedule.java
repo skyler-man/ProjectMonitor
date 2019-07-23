@@ -49,7 +49,6 @@ public class JiraInfoSchedule {
             if(jiraProject != null){
                 jiraProjects.add(jiraProject);
             }
-            break;
         }
         if(ListUtils.isNotEmpty(jiraProjects)){
             jiraProjectRepository.deleteAll();
