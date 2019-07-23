@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://rm-m5e0503y2wul76t36to.mysql.rds.aliyuncs.com:3306/project_monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT&useSSL=false
-    username: monitor
-    password: Liuyiqiangniubi666
+    url: jdbc:mysql://192.168.163.74:3306/monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT&useSSL=false
+    username: root
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
