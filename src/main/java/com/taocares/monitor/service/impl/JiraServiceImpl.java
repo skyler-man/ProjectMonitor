@@ -83,6 +83,7 @@ public class JiraServiceImpl implements IJiraService{
                 }
                 jiraProjectDto.setJiraBugDtos(jiraBugDtos);
             }
+            jiraProjectDtos.add(jiraProjectDto);
         }
         return jiraProjectDtos;
     }

@@ -71,6 +71,7 @@ public class SonarServiceImpl implements ISonarService{
                 }
                 sonarProjectDto.setSonarMeasureInfoDtos(sonarMeasureInfoDtos);
             }
+            sonarProjectDtos.add(sonarProjectDto);
         }
         return sonarProjectDtos;
     }
