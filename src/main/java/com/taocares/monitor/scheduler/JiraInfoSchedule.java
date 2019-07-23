@@ -52,7 +52,7 @@ public class JiraInfoSchedule {
             break;
         }
         if(ListUtils.isNotEmpty(jiraProjects)){
-//            jiraProjectRepository.deleteAll();
+            jiraProjectRepository.deleteAll();
             jiraProjectRepository.saveAll(jiraProjects);
         }
         Long endTime = System.currentTimeMillis();
