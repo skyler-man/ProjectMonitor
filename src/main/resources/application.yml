@@ -16,3 +16,7 @@ spring:
     generate-ddl: true
     show-sql: true
 
+jenkins:
+  url: jenkins.tao.qdcares:8080
+  schedule:
+    time: 0 0/2 * * * ?
