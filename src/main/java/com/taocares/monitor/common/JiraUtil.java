@@ -5,7 +5,6 @@ import com.atlassian.jira.rest.client.NullProgressMonitor;
 import com.atlassian.jira.rest.client.SearchRestClient;
 import com.atlassian.jira.rest.client.domain.*;
 import com.atlassian.jira.rest.client.internal.jersey.JerseyJiraRestClientFactory;
-import com.taocares.monitor.dto.JiraInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import mjson.Json;
 import org.joda.time.DateTime;
@@ -262,41 +261,6 @@ public class JiraUtil {
         return null;
     }
 
-
-
-    /**
-     * @Description: 获取所有可以收集到的JIRA信息并返回JiraInfoModel类型对象
-     * @Author: LiuYiQiang
-     * @Date: 10:05 2019/7/9
-     */
-    public static JiraInfoDto get_jira_info(Issue issue) throws URISyntaxException {
-        List<String> jiraCommentsBody = get_comments_body(issue);
-        DateTime jiraCreateTime = get_create_time(issue);
-        String description = get_description(issue);
-        String summary = get_summary(issue);
-        String reporter = get_reporter(issue);
-        ArrayList<String> assignees = get_assignees(issue);
-        String status = get_status(issue);
-        String issueType = get_issue_type(issue);
-        ArrayList<String> modules = get_modules(issue);
-        ArrayList<String> qianduans = get_qianduans(issue);
-        ArrayList<String> developers = get_developers(issue);
-        String product = get_product(issue);
-        JiraInfoDto jiraInfoModel = new JiraInfoDto();
-        jiraInfoModel.setJiraCommentsBody(jiraCommentsBody);
-        jiraInfoModel.setJiraCreateTime(jiraCreateTime);
-        jiraInfoModel.setDescription(description);
-        jiraInfoModel.setSummary(summary);
-        jiraInfoModel.setReporter(reporter);
-        jiraInfoModel.setAssignees(assignees);
-        jiraInfoModel.setStatus(status);
-        jiraInfoModel.setIssueType(issueType);
-        jiraInfoModel.setModules(modules);
-        jiraInfoModel.setQianduans(qianduans);
-        jiraInfoModel.setDevelopers(developers);
-        jiraInfoModel.setProduct(product);
-        return jiraInfoModel;
-    }
 
 
 //    /**

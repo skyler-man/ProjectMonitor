@@ -39,7 +39,7 @@ public class SonarInfoSchedule {
      * @Author: LiuYiQiang
      * @Date: 8:37 2019/7/10
      */
-    @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
+//    @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
     public void getSonarInfo() throws URISyntaxException, ExecutionException, InterruptedException {
         log.info("Sonar数据统计任务开始...");
         Long startTime = System.currentTimeMillis();
