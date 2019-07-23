@@ -1,5 +1,6 @@
 package com.taocares.monitor.service;
 
+import com.taocares.monitor.dto.JiraProjectDto;
 import com.taocares.monitor.dto.JiraProjectNameDto;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface IJiraService {
      * @Author: LiuYiQiang
      * @Date: 8:15 2019/7/23
      */
-    public List<JiraProjectNameDto> getJiraProjectNames();
+    List<JiraProjectNameDto> getJiraProjectNames();
+
+    List<JiraProjectDto> getJiraProjects();
 
 }

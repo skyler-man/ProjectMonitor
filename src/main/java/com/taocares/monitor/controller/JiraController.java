@@ -1,5 +1,6 @@
 package com.taocares.monitor.controller;
 
+import com.taocares.monitor.dto.JiraProjectDto;
 import com.taocares.monitor.dto.JiraProjectNameDto;
 import com.taocares.monitor.service.IJiraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class JiraController {
     @RequestMapping(value = "/getJiraProjectNames", method = RequestMethod.GET)
     public List<JiraProjectNameDto> getJiraProjectNames(){
         return jiraService.getJiraProjectNames();
+    }
+
+    @RequestMapping(value = "/getJiraProjects", method = RequestMethod.GET)
+    public List<JiraProjectDto> getJiraProjects(){
+        return jiraService.getJiraProjects();
     }
 
 }
