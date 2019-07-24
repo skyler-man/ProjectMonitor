@@ -7,16 +7,16 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 /**
- * jenkins job
+ * jenkins job_build_detail
  *
  * @author lin
- * @since 2019年7月23日
+ * @since 2019年7月24日
  */
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "monitor_jenkins_job")
-public class JenkinsJob {
+@Table(name = "monitor_jenkins_build_detail")
+public class JenkinsJobBuildDetail {
 
     @Id
     @GenericGenerator(name = "systemUUID", strategy = "uuid")
@@ -24,16 +24,16 @@ public class JenkinsJob {
     @Column(name = "ID", unique = true, nullable = false)
     private String id;
 
-    @Column(name = "name", length = 100)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "JOBID", nullable = false)
+    private JenkinsJob jenkinsJob;
+
+    @Column(name = "number", length = 5)
+    private String number;
 
     @Column(name = "url", length = 200)
     private String url;
 
-    @Column(name = "description", length = 200)
-    private String description;
-
-    @Column(name = "display_name", length = 200)
-    private String displayName;
-
+    @Column(name = "result", length = 20)
+    private String result;
 }

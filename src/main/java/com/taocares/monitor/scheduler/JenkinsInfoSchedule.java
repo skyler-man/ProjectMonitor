@@ -30,7 +30,7 @@ public class JenkinsInfoSchedule {
         Long startTime = System.currentTimeMillis();
         iJenkinsService.getJenkinsInfoForSchedule();
         Long endTime = System.currentTimeMillis();
-        log.info("Jira数据统计完成，总耗时：{}",endTime - startTime);
+        log.info("Jenkins数据统计完成，总耗时：{}",endTime - startTime);
     }
 
 
