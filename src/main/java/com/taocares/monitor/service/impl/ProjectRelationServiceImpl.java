@@ -76,6 +76,7 @@ public class ProjectRelationServiceImpl implements IProjectRelationService {
             projectRelations.add(projectRelation);
         }
         if(ListUtils.isNotEmpty(projectRelations)){
+            projectRelationRepository.deleteAll();
             projectRelationRepository.saveAll(projectRelations);
         }
     }
