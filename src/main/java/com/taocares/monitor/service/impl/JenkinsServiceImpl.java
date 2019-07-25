@@ -2,6 +2,8 @@ package com.taocares.monitor.service.impl;
 
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.*;
+import com.taocares.monitor.common.ListUtils;
+import com.taocares.monitor.dto.JenkinsJobNameDto;
 import com.taocares.monitor.entity.JenkinsJob;
 import com.taocares.monitor.entity.JenkinsJobBuildDetail;
 import com.taocares.monitor.entity.JenkinsJobBuildInfo;
@@ -136,5 +138,21 @@ public class JenkinsServiceImpl implements com.taocares.monitor.service.IJenkins
         }
         this.jobRepository.saveAll(jobList);
         this.buildMonInfoRepository.saveAll(jenkinsJobBuildMonInfoList);
+    }
+
+    @Override
+    public List<JenkinsJobNameDto> getJenkinsJobNames() {
+        List<JenkinsJob> jenkinsJobs = jobRepository.findAll();
+        if(ListUtils.isEmpty(jenkinsJobs)){
+            return new ArrayList<>();
+        }
+        List<JenkinsJobNameDto> jenkinsJobNameDtos = new ArrayList<>();
+        for(JenkinsJob jenkinsJob : jenkinsJobs){
+            JenkinsJobNameDto jenkinsJobNameDto = new JenkinsJobNameDto();
+            jenkinsJobNameDto.setId(jenkinsJob.getId());
+            jenkinsJobNameDto.setName(jenkinsJob.getName());
+            jenkinsJobNameDtos.add(jenkinsJobNameDto);
+        }
+        return jenkinsJobNameDtos;
     }
 }
