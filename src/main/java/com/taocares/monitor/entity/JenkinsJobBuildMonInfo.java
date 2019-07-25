@@ -16,8 +16,8 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "monitor_jenkins_build_detail")
-public class JenkinsJobBuildDetail {
+@Table(name = "monitor_jenkins_build_month_info")
+public class JenkinsJobBuildMonInfo {
 
     @Id
     @GenericGenerator(name = "systemUUID", strategy = "uuid")
@@ -29,15 +29,12 @@ public class JenkinsJobBuildDetail {
     @JoinColumn(name = "JOBID", nullable = false)
     private JenkinsJob jenkinsJob;
 
-    @Column(name = "number", length = 5)
-    private String number;
+    @Column(name="all_number",precision = 4, scale = 0)
+    private Integer allNumber;
 
-    @Column(name = "url", length = 200)
-    private String url;
+    @Column(name="success_number",precision = 4, scale = 0)
+    private Integer successNumber;
 
-    @Column(name = "result", length = 20)
-    private String result;
-
-    @Column(name = "build_time")
-    private Date buildTime;
+    @Column(name = "info_time", length = 10)
+    private String infoTime;
 }
