@@ -23,7 +23,7 @@ public class ProjectRelationController {
     @Autowired
     private IProjectRelationService projectRelationService;
 
-    @RequestMapping(value = "/set", method = RequestMethod.GET)
+    @RequestMapping(value = "/set", method = RequestMethod.POST)
     public void editProjectRelation(List<ProjectRelationDto> projectRelationDtos){
         projectRelationService.editProjectRelation(projectRelationDtos);
     }
