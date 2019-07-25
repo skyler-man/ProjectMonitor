@@ -24,7 +24,7 @@ public class JenkinsInfoSchedule {
     private IJenkinsService iJenkinsService;
 
 //    @Scheduled(cron = "${jenkins.schedule.time}")
-    @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
+//    @Scheduled(initialDelay=1000, fixedRate=60 * 60 * 1000)
     public void getJiraInfo() throws IOException, URISyntaxException {
         log.info("Jenkins数据统计任务开始...");
         Long startTime = System.currentTimeMillis();

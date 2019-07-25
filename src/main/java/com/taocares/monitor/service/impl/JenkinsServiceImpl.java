@@ -2,6 +2,8 @@ package com.taocares.monitor.service.impl;
 
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.*;
+import com.taocares.monitor.dto.JenkinsMonthAnalysisDto;
+import com.taocares.monitor.dto.JenkinsMonthDetailDto;
 import com.taocares.monitor.entity.JenkinsJob;
 import com.taocares.monitor.entity.JenkinsJobBuildDetail;
 import com.taocares.monitor.entity.JenkinsJobBuildInfo;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -53,9 +56,10 @@ public class JenkinsServiceImpl implements com.taocares.monitor.service.IJenkins
         URI serverURI = new URI("http://" + jenkinsUrl);
         JenkinsServer jenkins = new JenkinsServer(serverURI, "shaolin", "Sl123456");
         log.info("开始清除旧数据");
-        jobRepository.deleteAll();
-        buildInfoRepository.deleteAll();
-        buildDetailRepository.deleteAll();
+        this.buildMonInfoRepository.deleteAll();
+        this.jobRepository.deleteAll();
+        this.buildInfoRepository.deleteAll();
+        this.buildDetailRepository.deleteAll();
         log.info("清除旧数据成功");
         log.info("开始向表中插入数据");
         saveAllProject(jenkins);
@@ -63,7 +67,7 @@ public class JenkinsServiceImpl implements com.taocares.monitor.service.IJenkins
 
     }
 
-    public void saveAllProject(JenkinsServer jenkins) throws IOException {
+    private void saveAllProject(JenkinsServer jenkins) throws IOException {
         Map<String, Job> jobMgr = jenkins.getJobs();
         List<JenkinsJob> jobList = new ArrayList<>();
         List<JenkinsJobBuildInfo> buildInfoList = new ArrayList<>();
@@ -115,7 +119,7 @@ public class JenkinsServiceImpl implements com.taocares.monitor.service.IJenkins
                     } else {
                         jenkinsJobBuildMonInfo.setSuccessNumber(0);
                     }
-                    monInfoHashMap.put(monthKey,jenkinsJobBuildMonInfo);
+                    monInfoHashMap.put(monthKey, jenkinsJobBuildMonInfo);
                 } else {
                     JenkinsJobBuildMonInfo jenkinsJobBuildMonInfo = monInfoHashMap.get(monthKey);
                     jenkinsJobBuildMonInfo.setAllNumber(jenkinsJobBuildMonInfo.getAllNumber() + 1);
@@ -136,5 +140,39 @@ public class JenkinsServiceImpl implements com.taocares.monitor.service.IJenkins
         }
         this.jobRepository.saveAll(jobList);
         this.buildMonInfoRepository.saveAll(jenkinsJobBuildMonInfoList);
+    }
+
+    @Override
+    public List<JenkinsMonthAnalysisDto> getJenkinsMonthAnalysisDtoInThisYear(Integer size) {
+        if (size == null || size == 0) {
+            size = 5;
+        }
+        String nowYearJan = new SimpleDateFormat("yyyy").format(new Date()) + "-01";
+        List<String> mostJobIdList = this.buildMonInfoRepository.findMostBuildJodId(nowYearJan);
+        List<JenkinsMonthAnalysisDto> jenkinsMonthAnalysisDtoList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            String jobId = mostJobIdList.get(i);
+            JenkinsMonthAnalysisDto jenkinsMonthAnalysisDto = new JenkinsMonthAnalysisDto();
+            JenkinsJob jenkinsJob = this.jobRepository.getOne(jobId);
+            jenkinsMonthAnalysisDto.setJobName(jenkinsJob.getName());
+            List<JenkinsJobBuildMonInfo> jenkinsJobBuildMonInfoList = this.buildMonInfoRepository.findBuildInfoByJobId(jobId);
+            List<JenkinsMonthDetailDto> jenkinsMonthDetailList = new ArrayList<>();
+            for (JenkinsJobBuildMonInfo jenkinsJobBuildMonInfo : jenkinsJobBuildMonInfoList) {
+                JenkinsMonthDetailDto jenkinsMonthDetailDto = new JenkinsMonthDetailDto();
+                jenkinsMonthDetailDto.setAllBuildNumber(jenkinsJobBuildMonInfo.getAllNumber());
+                jenkinsMonthDetailDto.setSuccessBuildNumber(jenkinsJobBuildMonInfo.getSuccessNumber());
+                jenkinsMonthDetailDto.setMonth(jenkinsJobBuildMonInfo.getInfoTime());
+                if (jenkinsMonthDetailDto.getAllBuildNumber() != 0) {
+                    BigDecimal b = new BigDecimal(jenkinsMonthDetailDto.getSuccessBuildNumber() / jenkinsMonthDetailDto.getAllBuildNumber());
+                    jenkinsMonthDetailDto.setRate(b.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                } else {
+                    jenkinsMonthDetailDto.setRate(0);
+                }
+                jenkinsMonthDetailList.add(jenkinsMonthDetailDto);
+            }
+            jenkinsMonthAnalysisDto.setJenkinsMonthDetailList(jenkinsMonthDetailList);
+            jenkinsMonthAnalysisDtoList.add(jenkinsMonthAnalysisDto);
+        }
+        return jenkinsMonthAnalysisDtoList;
     }
 }
