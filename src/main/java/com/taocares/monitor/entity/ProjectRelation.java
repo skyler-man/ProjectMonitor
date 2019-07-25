@@ -23,13 +23,13 @@ public class ProjectRelation {
     @Column(name = "ID", unique = true, nullable = false)
     private String id;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     private JiraProject jiraProject;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     private SonarProject sonarProject;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     private JenkinsJob jenkinsJob;
 
 }

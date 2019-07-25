@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class JenkinsInfoSchedule {
 
     @Autowired
+
     private IJenkinsService iJenkinsService;
 
 //    @Scheduled(cron = "${jenkins.schedule.time}")
