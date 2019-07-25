@@ -63,7 +63,7 @@ public class SonarInfoSchedule {
         if(ListUtils.isEmpty(sonarProjects)){
             return;
         }
-        String metricKeys = "metricKeys=bugs,complexity,coverage,duplicated_lines,duplicated_lines_density,violations,code_smells,vulnerabilities";
+        String metricKeys = "metricKeys=bugs,complexity,coverage,duplicated_blocks,duplicated_lines_density,violations,code_smells,vulnerabilities,test_success_density,blocker_violations,critical_violations,major_violations,minor_violations,info_violations,sqale_debt_ratio,comment_lines_density";
         for(SonarProject sonarProject : sonarProjects){
             String getSonarInfoUrl = "http://192.168.163.234:9000/api/measures/component?component=" + sonarProject.getProjectKey() + "&" + metricKeys;
             String sonarInfo = HttpUtil.doGet(getSonarInfoUrl,"3bbf21a122746a4c2c34579ef5c95f7be17db54b");

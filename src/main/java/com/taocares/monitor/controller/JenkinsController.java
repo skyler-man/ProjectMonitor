@@ -1,6 +1,7 @@
 package com.taocares.monitor.controller;
 
 import com.taocares.monitor.dto.JenkinsMonthAnalysisDto;
+import com.taocares.monitor.dto.JenkinsJobNameDto;
 import com.taocares.monitor.service.IJenkinsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,11 @@ public class JenkinsController {
     @RequestMapping(value = "/getJenkinsMonthAnalysis", method = RequestMethod.GET)
     public List<JenkinsMonthAnalysisDto> getJenkinsMonthAnalysis(Integer size) {
         return this.jenkinsService.getJenkinsMonthAnalysisDtoInThisYear(size);
+    }
+
+    @RequestMapping(value = "/getJenkinsProjectNames", method = RequestMethod.GET)
+    public List<JenkinsJobNameDto> getJiraProjectNames(){
+        return jenkinsService.getJenkinsJobNames();
     }
 
 }
