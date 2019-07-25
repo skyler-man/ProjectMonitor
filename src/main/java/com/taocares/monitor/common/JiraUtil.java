@@ -5,6 +5,7 @@ import com.atlassian.jira.rest.client.NullProgressMonitor;
 import com.atlassian.jira.rest.client.SearchRestClient;
 import com.atlassian.jira.rest.client.domain.*;
 import com.atlassian.jira.rest.client.internal.jersey.JerseyJiraRestClientFactory;
+import com.taocares.monitor.dto.JiraIssueInfo;
 import lombok.extern.slf4j.Slf4j;
 import mjson.Json;
 import org.joda.time.DateTime;
@@ -364,7 +365,9 @@ public class JiraUtil {
      * @Author: LiuYiQiang
      * @Date: 8:35 2019/7/10
      */
-    public static Map<String,Integer> search_jql(String jql,String projectKey) throws ExecutionException, InterruptedException {
+    public static JiraIssueInfo search_jql(String jql, String projectKey) throws ExecutionException, InterruptedException {
+        JiraIssueInfo jiraIssueInfo = new JiraIssueInfo();
+        int bugs = 0;
         Map<String,Integer> jiraBugInfo = new HashMap<>();
         final NullProgressMonitor pm = new NullProgressMonitor();
         Long startTime = System.currentTimeMillis();
@@ -376,6 +379,9 @@ public class JiraUtil {
             BasicIssue basicIssue = basicIssues.next();
             String key = basicIssue.getKey();
             Issue issue = getIssue(key);
+            if(issue.getIssueType() != null && issue.getIssueType().getName() != null && issue.getIssueType().getName().equals("故障")){
+                bugs++;
+            }
             if(issue.getStatus().getName() == null){
                 continue;
             }
@@ -385,7 +391,9 @@ public class JiraUtil {
                 jiraBugInfo.put(issue.getStatus().getName(),jiraBugInfo.get(issue.getStatus().getName())+1);
             }
         }
-        return jiraBugInfo;
+        jiraIssueInfo.setJiraBugInfo(jiraBugInfo);
+        jiraIssueInfo.setBugs(bugs);
+        return jiraIssueInfo;
     }
 
 }

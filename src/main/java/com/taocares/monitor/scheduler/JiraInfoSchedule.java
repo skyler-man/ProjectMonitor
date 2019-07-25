@@ -3,13 +3,13 @@ package com.taocares.monitor.scheduler;
 import com.atlassian.jira.rest.client.domain.Project;
 import com.taocares.monitor.common.JiraUtil;
 import com.taocares.monitor.common.ListUtils;
+import com.taocares.monitor.dto.JiraIssueInfo;
 import com.taocares.monitor.entity.JiraBug;
 import com.taocares.monitor.entity.JiraMember;
 import com.taocares.monitor.entity.JiraProject;
 import com.taocares.monitor.repository.JiraProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,8 +73,13 @@ public class JiraInfoSchedule {
         List<JiraBug> jiraBugs = new ArrayList<>();
 
         String jql = "project = " + projectKey + " AND created >= 2018-07-01";
-        Map<String,Integer> jiraBugInfo = JiraUtil.search_jql(jql,projectKey);
-
+        JiraIssueInfo jiraIssueInfo = JiraUtil.search_jql(jql,projectKey);
+        Map<String,Integer> jiraBugInfo = jiraIssueInfo.getJiraBugInfo();
+        JiraBug bug = new JiraBug();
+        bug.setStatusName("BUG数量");
+        bug.setNumber(jiraIssueInfo.getBugs());
+        bug.setJiraProject(jiraProject);
+        jiraBugs.add(bug);
         for(Map.Entry<String,Integer> entry : jiraBugInfo.entrySet()){
             JiraBug jiraBug = new JiraBug();
             jiraBug.setNumber(entry.getValue());
