@@ -1,7 +1,10 @@
 package com.taocares.monitor.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.taocares.monitor.common.ListUtils;
 import com.taocares.monitor.dto.ProjectRelationDto;
+import com.taocares.monitor.dto.RelationJsonDto;
 import com.taocares.monitor.service.IProjectRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +29,19 @@ public class ProjectRelationController {
 
     @RequestMapping(value = "/set", method = RequestMethod.POST)
     public void editProjectRelation(@RequestParam(value = "content") String json){
-        List<ProjectRelationDto> relationSetJsonDtos = JSON.parseObject(json,ArrayList.class);
-        projectRelationService.editProjectRelation(relationSetJsonDtos);
+        List<JSONObject> relationSetJsonDtos = JSON.parseObject(json,ArrayList.class);
+        if(ListUtils.isEmpty(relationSetJsonDtos)){
+            return;
+        }
+        List<RelationJsonDto> relationJsonDtos = new ArrayList<>();
+        for(JSONObject jsonObject : relationSetJsonDtos){
+            RelationJsonDto relationJsonDto = new RelationJsonDto();
+            relationJsonDto.setJenkinsId((String) jsonObject.get("jenkinsId"));
+            relationJsonDto.setJiraId((String) jsonObject.get("jiraId"));
+            relationJsonDto.setSonarId((String) jsonObject.get("sonarId"));
+            relationJsonDtos.add(relationJsonDto);
+        }
+        projectRelationService.editProjectRelation(relationJsonDtos);
     }
 
 }

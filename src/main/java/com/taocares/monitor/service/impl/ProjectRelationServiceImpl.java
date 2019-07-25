@@ -2,6 +2,7 @@ package com.taocares.monitor.service.impl;
 
 import com.taocares.monitor.common.ListUtils;
 import com.taocares.monitor.dto.ProjectRelationDto;
+import com.taocares.monitor.dto.RelationJsonDto;
 import com.taocares.monitor.entity.JenkinsJob;
 import com.taocares.monitor.entity.JiraProject;
 import com.taocares.monitor.entity.ProjectRelation;
@@ -41,7 +42,7 @@ public class ProjectRelationServiceImpl implements IProjectRelationService {
     private ProjectRelationRepository projectRelationRepository;
 
     @Override
-    public void editProjectRelation(List<ProjectRelationDto> projectRelationDtos) {
+    public void editProjectRelation(List<RelationJsonDto> projectRelationDtos) {
         if(ListUtils.isEmpty(projectRelationDtos)){
             log.info("参数为空");
             return;
@@ -68,7 +69,7 @@ public class ProjectRelationServiceImpl implements IProjectRelationService {
             }
         }
         List<ProjectRelation> projectRelations = new ArrayList<>();
-        for(ProjectRelationDto projectRelationDto : projectRelationDtos){
+        for(RelationJsonDto projectRelationDto : projectRelationDtos){
             ProjectRelation projectRelation = new ProjectRelation();
             projectRelation.setJenkinsJob(jenkinsJobMap.get(projectRelationDto.getJenkinsId()));
             projectRelation.setJiraProject(jiraProjectMap.get(projectRelationDto.getJiraId()));

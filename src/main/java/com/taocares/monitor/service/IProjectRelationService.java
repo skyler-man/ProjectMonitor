@@ -1,6 +1,6 @@
 package com.taocares.monitor.service;
 
-import com.taocares.monitor.dto.ProjectRelationDto;
+import com.taocares.monitor.dto.RelationJsonDto;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface IProjectRelationService {
 
-    void editProjectRelation(List<ProjectRelationDto> projectRelationDtos);
+    void editProjectRelation(List<RelationJsonDto> projectRelationDtos);
 
 }
