@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * jenkins job
@@ -35,5 +37,11 @@ public class JenkinsJob {
 
     @Column(name = "display_name", length = 200)
     private String displayName;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "jenkinsJob",cascade = CascadeType.ALL)
+    private JenkinsJobBuildInfo jenkinsJobBuildInfo;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "jenkinsJob",cascade = CascadeType.ALL)
+    private List<JenkinsJobBuildDetail> jenkinsJobBuildDetailList = new ArrayList<>();
 
 }
