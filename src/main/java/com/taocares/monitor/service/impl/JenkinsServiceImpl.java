@@ -147,13 +147,12 @@ public class JenkinsServiceImpl implements com.taocares.monitor.service.IJenkins
     @Override
     public List<JenkinsMonthAnalysisDto> getJenkinsMonthAnalysisDtoInThisYear(Integer size) {
         if (size == null || size == 0) {
-            size = 5;
+            size = 70;
         }
         String nowYearJan = new SimpleDateFormat("yyyy").format(new Date()) + "-01";
         List<String> mostJobIdList = this.buildMonInfoRepository.findMostBuildJodId(nowYearJan);
         List<JenkinsMonthAnalysisDto> jenkinsMonthAnalysisDtoList = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            String jobId = mostJobIdList.get(i);
+        for (String jobId : mostJobIdList) {
             JenkinsMonthAnalysisDto jenkinsMonthAnalysisDto = new JenkinsMonthAnalysisDto();
             JenkinsJob jenkinsJob = this.jobRepository.getOne(jobId);
             jenkinsMonthAnalysisDto.setJobName(jenkinsJob.getName());
