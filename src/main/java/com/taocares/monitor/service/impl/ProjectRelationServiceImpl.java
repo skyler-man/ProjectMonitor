@@ -1,5 +1,6 @@
 package com.taocares.monitor.service.impl;
 
+import com.taocares.commons.beans.BeanUtils;
 import com.taocares.monitor.common.ListUtils;
 import com.taocares.monitor.dto.ProjectRelationDto;
 import com.taocares.monitor.dto.RelationJsonDto;
@@ -80,5 +81,28 @@ public class ProjectRelationServiceImpl implements IProjectRelationService {
             projectRelationRepository.deleteAll();
             projectRelationRepository.saveAll(projectRelations);
         }
+    }
+
+    @Override
+    public Map<String,ProjectRelationDto> findProjectRelation() {
+        List<ProjectRelation> projectRelations = projectRelationRepository.findAll();
+        Map<String,ProjectRelationDto> projectRelationDtoMap = new HashMap<>();
+        for(ProjectRelation projectRelation : projectRelations){
+            ProjectRelationDto projectRelationDto = new ProjectRelationDto();
+            projectRelationDto.setId(projectRelation.getId());
+            if(projectRelation.getJenkinsJob() != null){
+                projectRelationDto.setJenkinsId(projectRelation.getJenkinsJob().getId());
+            }
+            if(projectRelation.getJiraProject() != null){
+                projectRelationDto.setJiraId(projectRelation.getJiraProject().getId());
+            }
+            if(projectRelation.getSonarProject() != null){
+                projectRelationDto.setSonarId(projectRelation.getSonarProject().getId());
+            }
+            if(projectRelation.getJiraProject() != null){
+                projectRelationDtoMap.put(projectRelation.getJiraProject().getId(),projectRelationDto);
+            }
+        }
+        return projectRelationDtoMap;
     }
 }

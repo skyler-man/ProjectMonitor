@@ -12,6 +12,8 @@ import lombok.Setter;
 @Setter
 public class ProjectRelationDto {
 
+    private String id;
+
     private String jiraId;
 
     private String sonarId;

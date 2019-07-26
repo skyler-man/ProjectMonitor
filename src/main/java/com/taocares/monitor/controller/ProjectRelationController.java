@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description:
@@ -44,4 +45,8 @@ public class ProjectRelationController {
         projectRelationService.editProjectRelation(relationJsonDtos);
     }
 
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
+    public Map<String,ProjectRelationDto> findAll(){
+        return projectRelationService.findProjectRelation();
+    }
 }
